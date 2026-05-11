@@ -7,7 +7,6 @@ from tkinter import filedialog, messagebox
 from playwright.async_api import async_playwright
 
 
-# ---------------- SVG SIZE PARSER ----------------
 def get_svg_size(svg_content):
 
     viewbox = re.search(r'viewBox="([\d\.\s\-]+)"', svg_content)
@@ -25,18 +24,18 @@ def get_svg_size(svg_content):
     return 512, 512
 
 
-# ---------------- APP ----------------
+
 class SVGExporterApp:
 
     def __init__(self, root):
         self.root = root
         self.root.title("Animated SVG → PNG Sequence")
-        self.root.geometry("500x400")  # fixed size
+        self.root.geometry("500x400")
 
         self.svg_path = None
         self.out_dir = None
 
-        # ---------------- UI ----------------
+
         tk.Button(root, text="Load SVG", command=self.load_svg).pack(pady=5)
         self.svg_label = tk.Label(root, text="No SVG loaded")
         self.svg_label.pack()
@@ -45,25 +44,24 @@ class SVGExporterApp:
         self.folder_label = tk.Label(root, text="No folder selected")
         self.folder_label.pack()
 
-        # name input
+
         tk.Label(root, text="Export Name").pack()
         self.name_entry = tk.Entry(root)
         self.name_entry.insert(0, "")
         self.name_entry.pack()
 
-        # fps
+
         tk.Label(root, text="FPS").pack()
         self.fps_entry = tk.Entry(root)
         self.fps_entry.insert(0, "10")
         self.fps_entry.pack()
 
-        # duration
+
         tk.Label(root, text="Duration (seconds)").pack()
         self.duration_entry = tk.Entry(root)
         self.duration_entry.insert(0, "5")
         self.duration_entry.pack()
 
-        # quality scale
         tk.Label(root, text="Scale (quality multiplier)").pack()
         self.scale_entry = tk.Entry(root)
         self.scale_entry.insert(0, "2")
@@ -74,7 +72,7 @@ class SVGExporterApp:
 
         tk.Button(root, text="Export PNG Sequence", command=self.start_export).pack(pady=10)
 
-    # ---------------- FILE PICKERS ----------------
+
     def load_svg(self):
         self.svg_path = filedialog.askopenfilename(filetypes=[("SVG files", "*.svg")])
         if self.svg_path:
@@ -85,7 +83,6 @@ class SVGExporterApp:
         if self.out_dir:
             self.folder_label.config(text=self.out_dir)
 
-    # ---------------- START EXPORT ----------------
     def start_export(self):
         if not self.svg_path or not self.out_dir:
             messagebox.showerror("Error", "Load SVG and output folder first")
@@ -104,7 +101,6 @@ class SVGExporterApp:
         self.status.config(text=text)
         self.root.update_idletasks()
 
-    # ---------------- EXPORT CORE ----------------
     async def export_frames(self):
 
         fps = int(self.fps_entry.get())
@@ -202,7 +198,6 @@ class SVGExporterApp:
         messagebox.showinfo("Done", "Export complete!")
 
 
-# ---------------- SAFE ENTRY POINT ----------------
 if __name__ == "__main__":
     print("Launching SVG Exporter UI...")
     root = tk.Tk()
